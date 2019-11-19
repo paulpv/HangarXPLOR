@@ -65,19 +65,34 @@ HangarXPLOR._giftableCount = HangarXPLOR._giftableCount || 0;
 HangarXPLOR._packageCount  = HangarXPLOR._packageCount || 0;
 HangarXPLOR._ltiCount      = HangarXPLOR._ltiCount || 0;
   
-HangarXPLOR.Initialize = function()
-{
+HangarXPLOR.Initialize = function() {
   HangarXPLOR.LoadSettings(function() {
-    var $lists = $('.list-items');
-    
-    if ($lists.length == 1) {
-      HangarXPLOR.BulkUI();
-      HangarXPLOR.$list = $($lists[0]);
-      HangarXPLOR.$list.addClass('js-inventory');
-      $lists = undefined;
-      HangarXPLOR.LoadPage(1);
-    } else {
-      HangarXPLOR.Log('Error locating inventory');
+
+    var pathname = window.location.pathname;
+    HangarXPLOR.Log('Initialize->LoadSettings', 'pathname=', pathname);
+
+    switch(pathname) {
+      case '/account/pledges': {
+        var $lists = $('.list-items');
+
+        if ($lists.length == 1) {
+          HangarXPLOR.BulkUI();
+          HangarXPLOR.$list = $($lists[0]);
+          HangarXPLOR.$list.addClass('js-inventory');
+          $lists = undefined;
+          HangarXPLOR.LoadPage(1);
+        } else {
+          HangarXPLOR.Log('Error locating inventory');
+        }
+        break;
+      }
+      case '/account/buy-back-pledges': {
+        var $pledges = $('.pledges');
+        HangarXPLOR.Log('Initialize->LoadSettings', '$pledges=', $pledges);
+
+        //...
+        break;
+      }
     }
   });
 }

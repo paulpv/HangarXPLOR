@@ -5,9 +5,12 @@
   "short_name": "HangarXPLOR",
   "version": "0.0.0.1",
   
-  "author": "/u/alluran (Peter Dolkens)",
+  "author": "/u/alluran (Peter Dolkens), @paulpv",
   
-  "permissions": [ "https://robertsspaceindustries.com/*", "storage" ],
+  "permissions": [
+    "https://robertsspaceindustries.com/*",
+    "storage"
+  ],
   
   "icons": {
     "128": "icons/icon_128.png"
@@ -20,7 +23,10 @@
     "default_popup": "ui_resources/HangarXPLOR.Settings.html"
   },
   "content_scripts": [{
-    "matches": ["https://robertsspaceindustries.com/account/pledges*", "https://www.robertsspaceindustries.com/account/pledges*"],
+    "matches": [
+      "https://robertsspaceindustries.com/account/pledges*",
+      "https://robertsspaceindustries.com/account/buy-back-pledges*",
+    ],
     "js": ["content_scripts/loader.js"],
     "run_at": "document_end"
   }],
