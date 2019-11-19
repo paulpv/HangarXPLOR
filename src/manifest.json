@@ -25,7 +25,7 @@
   "content_scripts": [{
     "matches": [
       "https://robertsspaceindustries.com/account/pledges*",
-      "https://robertsspaceindustries.com/account/buy-back-pledges*",
+      "https://robertsspaceindustries.com/account/buy-back-pledges*"
     ],
     "js": ["content_scripts/loader.js"],
     "run_at": "document_end"
