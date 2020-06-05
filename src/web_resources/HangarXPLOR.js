@@ -5,6 +5,15 @@ HangarXPLOR.$list = null;                            // Element where we display
 HangarXPLOR._inventory = [];                         // Inventory containing all pledges
 HangarXPLOR._debugRoot = $('#HangarXPLOR-js-1').attr('src').replace(/(.*)web_resources.*/, "$1");
 
+//
+// To debug settings:
+//  1. Visit chrome://sync-internals/
+//  2. Click Sync Node Browser tab and wait for it to load (may give a blank screen or in progress cursor)
+//  3. Click expansion triangle in the sidebar for Extension settings
+//  4. Click on individual settings in the sidebar to see their values and other metadata
+// Alternatively, try https://chrome.google.com/webstore/detail/storage-area-explorer/ocfjjjjhkpapocigimmppepjgfdecjkb
+//
+
 HangarXPLOR.LoadSettings = function(callback)
 {
   chrome.storage.sync.get(null, function(settings) {
@@ -87,10 +96,17 @@ HangarXPLOR.Initialize = function() {
         break;
       }
       case '/account/buy-back-pledges': {
-        var $pledges = $('.pledges');
+        var $pledges = $('#billing > div > div.inner-content > section.available-pledges > ul');
         HangarXPLOR.Log('Initialize->LoadSettings', '$pledges=', $pledges);
 
-        //...
+        if ($pledges.length == 1) {
+          HangarXPLOR.Log('TODO:(pv) Load buybacks...');
+          //BulkUI();
+          //...
+          //LoadPage(1);
+        } else {
+          HangarXPLOR.Log('Error locating buybacks');
+        }
         break;
       }
     }
