@@ -14,8 +14,7 @@ HangarXPLOR._callbacks.Melt = HangarXPLOR._callbacks.Melt || function() { window
 HangarXPLOR._callbacks.MeltConfirm = HangarXPLOR._callbacks.MeltConfirm || function() { window.alert('Coming Soon') }
 
 // Render UI controls
-HangarXPLOR.BulkUI = function()
-{
+HangarXPLOR.BulkUI = function() {
   var bulkHeight = $('.js-bulk-ui').height();
   var maxOffset = document.body.scrollHeight - ($('#billing .inner-content').height() + $('#billing .inner-content').offset().top - 150);
   var minOffset = $('.billing-title-pager-wrapper').offset().top;
@@ -58,14 +57,12 @@ HangarXPLOR.BulkUI = function()
   positionUI();
 }
 
-HangarXPLOR.BindBulkUI = function()
-{
+HangarXPLOR.BindBulkUI = function() {
   HangarXPLOR.$bulkUI.$inner.removeClass('loading');
   HangarXPLOR.$list.addClass(HangarXPLOR._feature.Summary);
   HangarXPLOR.$list.on('click.HangarXPLOR', 'a', function(e) { e.originalEvent.isButton = true; });
   HangarXPLOR.$list.on('click.HangarXPLOR', 'li', function(e) {
-    if (!e.originalEvent.isButton)
-    {
+    if (!e.originalEvent.isButton) {
       $('.row', this).removeClass('js-selected');
       this.isSelected = !this.isSelected;
       if (this.isSelected) $('.row', this).addClass('js-selected');
@@ -78,8 +75,7 @@ HangarXPLOR.BindBulkUI = function()
     
     HangarXPLOR.$list.removeClass(HangarXPLOR._feature.Summary);
     
-    switch (HangarXPLOR._feature.Summary)
-    {
+    switch (HangarXPLOR._feature.Summary) {
       case "cash": HangarXPLOR._feature.Summary = "count"; break;
       case "count": HangarXPLOR._feature.Summary = "cash"; break;
     }
@@ -92,8 +88,7 @@ HangarXPLOR.BindBulkUI = function()
   
 }
 
-HangarXPLOR.UpdateStatus = function()
-{
+HangarXPLOR.UpdateStatus = function() {
   HangarXPLOR.$bulkUI.$loading.empty();
   
   HangarXPLOR.$bulkUI.$loading.append(
@@ -103,8 +98,7 @@ HangarXPLOR.UpdateStatus = function()
   );
 }
 
-function AppendValues(parent, title, upgradeCount, shipCount, packageCount, meltAmount)
-{
+function AppendValues(parent, title, upgradeCount, shipCount, packageCount, meltAmount) {
   var className;
   if (!HangarXPLOR.SummaryBothCashAndCount) {
     className = HangarXPLOR._feature.Summary;
@@ -140,16 +134,14 @@ function AppendValues(parent, title, upgradeCount, shipCount, packageCount, melt
   );
 }
 
-function AppendAllValues()
-{
+function AppendAllValues() {
   if (HangarXPLOR._selected.length > 0) {
     AppendValues(HangarXPLOR.$bulkUI.$value, 'Selected', HangarXPLOR._selectedUpgrades, HangarXPLOR._selectedShips, HangarXPLOR._selectedPackages, HangarXPLOR._selectedMelt);
   }
   AppendValues(HangarXPLOR.$bulkUI.$value, 'Total', HangarXPLOR._upgradeCount, HangarXPLOR._shipCount, HangarXPLOR._packageCount, HangarXPLOR._totalMelt);
 }
 
-HangarXPLOR.RefreshBulkUI = function()
-{
+HangarXPLOR.RefreshBulkUI = function() {
   HangarXPLOR._meltable = [];
   HangarXPLOR._giftable = [];
   HangarXPLOR._selectedUpgrades = 0;
@@ -191,8 +183,7 @@ HangarXPLOR.RefreshBulkUI = function()
   if (HangarXPLOR.BulkEnabled && HangarXPLOR._giftable.length > 0) HangarXPLOR.$bulkUI.$actions.append(HangarXPLOR.Button('Gift ' + HangarXPLOR._giftable.length + ' Items', 'gift js-bulk-gift', HangarXPLOR._callbacks.Gift));
 }
 
-HangarXPLOR.ResetBulkUI = function()
-{
+HangarXPLOR.ResetBulkUI = function() {
   for (var i = 0, j = HangarXPLOR._inventory.length; i < j; i++) HangarXPLOR._inventory.isSelected = false;
   
   $('.row', HangarXPLOR.$list).removeClass('js-selected');  

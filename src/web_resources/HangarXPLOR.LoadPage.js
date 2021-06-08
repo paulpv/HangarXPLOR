@@ -20,10 +20,10 @@ HangarXPLOR.LoadPage = function(pageNo) {
   var $page = $('<div>');
   
   $page.load(url + ' .page-wrapper', function(response, status) {
-    if (status == "success") {
-      HangarXPLOR.ProcessPage(this, pageNo)
-    } else {
-      HangarXPLOR.Log('Error loading page ' + pageNo + ' of your hangar - please contact plugins@ddrit.com for further support')
+    if (status != "success") {
+      HangarXPLOR.Log('Error loading page ' + pageNo + ' of your hangar - please contact plugins@ddrit.com for further support');
+      return;
     }
+    HangarXPLOR.ProcessPage(this, pageNo);
   });
 }

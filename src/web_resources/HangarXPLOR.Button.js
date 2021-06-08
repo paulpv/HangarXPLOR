@@ -2,8 +2,7 @@
 var HangarXPLOR = HangarXPLOR || {};
 
 // Render a button that calls a callback
-HangarXPLOR.Button = function(label, className, callback)
-{
+HangarXPLOR.Button = function(label, className, callback) {
   HangarXPLOR.Log('Rendering Button', label, className);
   
   className = className || 'js-custom-button';
@@ -17,12 +16,13 @@ HangarXPLOR.Button = function(label, className, callback)
       $('<span>', { class: 'right-section' })
     );
   
-  $button.bind('click.HangarXPLOR', function(e)
-  {
+  $button.bind('click.HangarXPLOR', function(e) {
     e.preventDefault();
     e.stopPropagation();
-    if (typeof callback === 'function') callback.call(this, e);
-    else HangarXPLOR.Log('Error With Callback', callback);
+    if (typeof callback === 'function')
+      callback.call(this, e);
+    else
+      HangarXPLOR.Log('Error With Callback', callback);
   });
   
   return $button;
