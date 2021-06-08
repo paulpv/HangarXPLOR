@@ -3,9 +3,6 @@ var HangarXPLOR = HangarXPLOR || {};
 
 // Load a page of pledges from RSI
 HangarXPLOR.LoadPage = function(pageNo) {
-  var pathname = window.location.pathname;
-  HangarXPLOR.Log('LoadPage', 'pathname=', pathname);
-
   pageNo = pageNo || 1;
   
   HangarXPLOR.UpdateStatus(pageNo);
