@@ -15,11 +15,30 @@ HangarXPLOR._callbacks.MeltConfirm = HangarXPLOR._callbacks.MeltConfirm || funct
 
 // Render UI controls
 HangarXPLOR.BulkUI = function() {
+  var pathname = window.location.pathname;
+  HangarXPLOR.Log('BulkUI', 'pathname=', pathname);
+  switch(pathname) {
+    case '/account/pledges': {
+      BulkUIHangar();
+      break;
+    }
+    case '/account/buy-back-pledges': {
+      BulkUIBuyback();
+      break;
+    }
+  }
+}
+
+function BulkUIHangar() {
   var bulkHeight = $('.js-bulk-ui').height();
   var $innerContent = $('#billing .inner-content');
   var maxOffset = document.body.scrollHeight - ($innerContent.height() + $innerContent.offset().top - 150);
+  var $sideNav = $('#billing > div.content.clearfix > div.sidenav');
+  //HangarXPLOR.Log(`BulkUIHangar $sideNav=`, $sideNav);
   var minOffset = $('.billing-title-pager-wrapper').offset().top;
-  
+  var minOffset = $sideNav.offset().top + $sideNav.height();
+  //HangarXPLOR.Log(`BulkUIHangar maxOffset=${maxOffset}, minOffset=${minOffset}`);
+
   var positionUI = function() {
     var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     if (scrollTop > document.body.scrollHeight - maxOffset - bulkHeight) HangarXPLOR.$bulkUI[0].style.top = (document.body.scrollHeight - maxOffset - bulkHeight - scrollTop + 150) + 'px';
@@ -40,6 +59,53 @@ HangarXPLOR.BulkUI = function() {
   HangarXPLOR.$bulkUI.$loading = $('<div>', { class: 'status value' });
   
   $billing.append(HangarXPLOR.$bulkUI);
+  HangarXPLOR.$bulkUI.append(HangarXPLOR.$bulkUI.$inner);
+  HangarXPLOR.$bulkUI.$inner.append(
+    HangarXPLOR.$bulkUI.$loading,
+    HangarXPLOR.$bulkUI.$value,
+    HangarXPLOR.$bulkUI.$actions,
+    HangarXPLOR.$bulkUI.$downloads,
+    $('<div>', { class: 'top-line-thin' }),
+    $('<div>', { class: 'top-line' }),
+    $('<div>', { class: 'corner corner-top-right' }),
+    $('<div>', { class: 'corner corner-bottom-right' }));
+  
+  HangarXPLOR.$bulkUI.$downloads.append(HangarXPLOR.Button('Download CSV', 'download js-download-csv', HangarXPLOR._callbacks.DownloadCSV));
+  HangarXPLOR.$bulkUI.$downloads.append(HangarXPLOR.Button('Download JSON', 'download js-download-json', HangarXPLOR._callbacks.DownloadJSON));
+
+  bulkHeight = $('.js-bulk-ui').height();
+  positionUI();
+}
+
+function BulkUIBuyback() {
+  var bulkHeight = $('.js-bulk-ui').height();
+  var $innerContent = $('#billing > div > div.inner-content');
+  var maxOffset = document.body.scrollHeight - ($innerContent.height() + $innerContent.offset().top - 150);
+  var $sideNav = $('#billing > div > div.sidenav');
+  //HangarXPLOR.Log(`BulkUIBuyback $sideNav=`, $sideNav);
+  var minOffset = $sideNav.offset().top + $sideNav.height();
+  //HangarXPLOR.Log(`BulkUIBuyback maxOffset=${maxOffset}, minOffset=${minOffset}`);
+
+  var positionUI = function() {
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    if (scrollTop > document.body.scrollHeight - maxOffset - bulkHeight) HangarXPLOR.$bulkUI[0].style.top = (document.body.scrollHeight - maxOffset - bulkHeight - scrollTop + 150) + 'px';
+    else if (scrollTop < minOffset) HangarXPLOR.$bulkUI[0].style.top = (minOffset - scrollTop + 150) + 'px';
+    else HangarXPLOR.$bulkUI[0].style.top = '160px';
+  };
+  
+  $(document).on('scroll', positionUI);
+  
+  var $content = $('.content');
+  
+  HangarXPLOR.$bulkUI = $('<div>', { class: 'js-bulk-ui' });
+  
+  HangarXPLOR.$bulkUI.$inner = $('<div>', { class: 'inner content-block1 loading' });
+  HangarXPLOR.$bulkUI.$value = $('<div>', { class: 'value' });
+  HangarXPLOR.$bulkUI.$actions = $('<div>', { class: 'actions' });
+  HangarXPLOR.$bulkUI.$downloads = $('<div>', { class: 'actions' });
+  HangarXPLOR.$bulkUI.$loading = $('<div>', { class: 'status value' });
+  
+  $content.append(HangarXPLOR.$bulkUI);
   HangarXPLOR.$bulkUI.append(HangarXPLOR.$bulkUI.$inner);
   HangarXPLOR.$bulkUI.$inner.append(
     HangarXPLOR.$bulkUI.$loading,

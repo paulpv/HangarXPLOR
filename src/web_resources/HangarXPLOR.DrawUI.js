@@ -12,18 +12,19 @@ function OverrideMarginsAndPaddings() {
   temp.css('padding-right', '15px');
   temp.css('max-width', 'none');
 
+  temp = $('#billing');
+  temp.css('padding', '15px');
+  temp.css('padding-top', '30px');
+
   temp = $('#billing > div.content.clearfix > div.sidenav');
   temp.css('width', '330px');
 
   temp = $('#billing > div.content.clearfix > div.inner-content');
+  temp.css('width', '100%');
   temp.css('padding-left', '330px');
 
   temp = $('#billing > div.content.clearfix > div.sidenav > ul > li.active > a > span.bg');
   temp.css('width', '275px');
-
-  temp = $('#billing');
-  temp.css('padding', '15px');
-  temp.css('padding-top', '30px');
 
   temp = $('#billing > div.content.clearfix');
   temp.css('padding-top', '15px');

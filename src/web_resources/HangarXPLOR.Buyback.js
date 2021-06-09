@@ -13,7 +13,7 @@ HangarXPLOR.LoadBuybacks = function() {
   }
 
   HangarXPLOR.Log('Loading buyback items...');
-  BuybackBulkUI();
+  HangarXPLOR.BulkUI();
   HangarXPLOR.$buybacks = $($buybacks[0]);
   HangarXPLOR.$buybacks.addClass('js-inventory');
   //HangarXPLOR.Log('Initialize->LoadSettings', 'HangarXPLOR.$buybacks=', HangarXPLOR.$buybacks);
@@ -108,53 +108,6 @@ function sleep(milliSeconds) {
   return new Promise(resolve => setTimeout(resolve, milliSeconds));
 }
 
-function BuybackBulkUI() {
-  var bulkHeight = $('.js-bulk-ui').height();
-  var $innerContent = $('#billing > div > div.inner-content');
-  var maxOffset = document.body.scrollHeight - ($innerContent.height() + $innerContent.offset().top - 150);
-  var $sideNav = $('#billing > div > div.sidenav');
-  //HangarXPLOR.Log(`BulkUI $sideNav=`, $sideNav);
-  var minOffset = $sideNav.offset().top + $sideNav.height();
-  //HangarXPLOR.Log(`BulkUI maxOffset=${maxOffset}, minOffset=${minOffset}`);
-
-  var positionUI = function() {
-    var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    if (scrollTop > document.body.scrollHeight - maxOffset - bulkHeight) HangarXPLOR.$bulkUI[0].style.top = (document.body.scrollHeight - maxOffset - bulkHeight - scrollTop + 150) + 'px';
-    else if (scrollTop < minOffset) HangarXPLOR.$bulkUI[0].style.top = (minOffset - scrollTop + 150) + 'px';
-    else HangarXPLOR.$bulkUI[0].style.top = '160px';
-  };
-  
-  $(document).on('scroll', positionUI);
-  
-  var $content = $('.content');
-  
-  HangarXPLOR.$bulkUI = $('<div>', { class: 'js-bulk-ui' });
-  
-  HangarXPLOR.$bulkUI.$inner = $('<div>', { class: 'inner content-block1 loading' });
-  HangarXPLOR.$bulkUI.$value = $('<div>', { class: 'value' });
-  HangarXPLOR.$bulkUI.$actions = $('<div>', { class: 'actions' });
-  HangarXPLOR.$bulkUI.$downloads = $('<div>', { class: 'actions' });
-  HangarXPLOR.$bulkUI.$loading = $('<div>', { class: 'status value' });
-  
-  $content.append(HangarXPLOR.$bulkUI);
-  HangarXPLOR.$bulkUI.append(HangarXPLOR.$bulkUI.$inner);
-  HangarXPLOR.$bulkUI.$inner.append(
-    HangarXPLOR.$bulkUI.$loading,
-    HangarXPLOR.$bulkUI.$value,
-    HangarXPLOR.$bulkUI.$actions,
-    HangarXPLOR.$bulkUI.$downloads,
-    $('<div>', { class: 'top-line-thin' }),
-    $('<div>', { class: 'top-line' }),
-    $('<div>', { class: 'corner corner-top-right' }),
-    $('<div>', { class: 'corner corner-bottom-right' }));
-  
-  HangarXPLOR.$bulkUI.$downloads.append(HangarXPLOR.Button('Download CSV', 'download js-download-csv', HangarXPLOR._callbacks.DownloadCSV));
-  HangarXPLOR.$bulkUI.$downloads.append(HangarXPLOR.Button('Download JSON', 'download js-download-json', HangarXPLOR._callbacks.DownloadJSON));
-
-  bulkHeight = $('.js-bulk-ui').height();
-  positionUI();
-}
-
 function BuybackDrawUI() {
   //...
 
@@ -164,20 +117,23 @@ function BuybackDrawUI() {
   temp.css('padding-bottom', '15px');
 
   temp = $('#contentbody > div.wrapper');
+  temp.css('padding-left', '15px');
+  temp.css('padding-right', '15px');
   temp.css('max-width', 'none');
 
   temp = $('#billing');
-  temp.css('padding', '20px');
+  temp.css('padding', '15px');
+  temp.css('padding-top', '30px');
 
   temp = $('#billing > div.content.clearfix > div.sidenav');
   temp.css('width', '330px');
 
-  temp = $('#billing > div.content.clearfix > div.sidenav > ul > li.active > a > span.bg');
-  temp.css('width', '275px');
-
   temp = $('#billing > div > div.inner-content');
   temp.css('width', '100%');
   temp.css('padding-left', '330px');
+
+  temp = $('#billing > div.content.clearfix > div.sidenav > ul > li.active > a > span.bg');
+  temp.css('width', '275px');
 
   //...
 
@@ -188,6 +144,7 @@ function BuybackDrawUI() {
   $controls.insertAfter('div.inner-content > section.buy-back-pledges');
 
   // TODO:(pv) Move this to BuyBackBulkUI and add "Show All"
+  // TODO:(pv) Use [chrome-only?] storage to persist hidden items
   $controls2.append(HangarXPLOR.Button('Hide', 'js-custom-filter', () => {
     console.log('click');
     var $selected = $('.js-selected', HangarXPLOR.$buybacks);
