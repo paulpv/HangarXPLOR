@@ -16,7 +16,8 @@ HangarXPLOR._callbacks.MeltConfirm = HangarXPLOR._callbacks.MeltConfirm || funct
 // Render UI controls
 HangarXPLOR.BulkUI = function() {
   var bulkHeight = $('.js-bulk-ui').height();
-  var maxOffset = document.body.scrollHeight - ($('#billing .inner-content').height() + $('#billing .inner-content').offset().top - 150);
+  var $innerContent = $('#billing .inner-content');
+  var maxOffset = document.body.scrollHeight - ($innerContent.height() + $innerContent.offset().top - 150);
   var minOffset = $('.billing-title-pager-wrapper').offset().top;
   
   var positionUI = function() {

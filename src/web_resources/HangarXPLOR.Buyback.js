@@ -97,7 +97,7 @@ function ProcessBuybackPage($page, pageNo, pageSize) {
 }
 
 function ProcessBuybackItem() {
-  HangarXPLOR.Log('ProcessBuybackItem', this);
+  //HangarXPLOR.Log('ProcessBuybackItem', this);
 
   //...
 
@@ -110,9 +110,13 @@ function sleep(milliSeconds) {
 
 function BuybackBulkUI() {
   var bulkHeight = $('.js-bulk-ui').height();
-  var maxOffset = document.body.scrollHeight - ($('.content .inner-content').height() + $('.content .inner-content').offset().top - 150);
-  var minOffset = $('.buy-back-pledges').offset().top;
-  
+  var $innerContent = $('#billing > div > div.inner-content');
+  var maxOffset = document.body.scrollHeight - ($innerContent.height() + $innerContent.offset().top - 150);
+  var $sideNav = $('#billing > div > div.sidenav');
+  //HangarXPLOR.Log(`BulkUI $sideNav=`, $sideNav);
+  var minOffset = $sideNav.offset().top + $sideNav.height();
+  //HangarXPLOR.Log(`BulkUI maxOffset=${maxOffset}, minOffset=${minOffset}`);
+
   var positionUI = function() {
     var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     if (scrollTop > document.body.scrollHeight - maxOffset - bulkHeight) HangarXPLOR.$bulkUI[0].style.top = (document.body.scrollHeight - maxOffset - bulkHeight - scrollTop + 150) + 'px';
@@ -172,7 +176,7 @@ function BuybackDrawUI() {
   temp.css('width', '275px');
 
   temp = $('#billing > div > div.inner-content');
-  temp.css('width', 'auto');
+  temp.css('width', '100%');
   temp.css('padding-left', '330px');
 
   //...
