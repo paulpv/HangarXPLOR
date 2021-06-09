@@ -87,14 +87,14 @@ function LoadBuybacks() {
   }
 
   HangarXPLOR.Log('Loading buyback items...');
-  //HangarXPLOR.BulkUI();
+  BuybackBulkUI();
   HangarXPLOR.$buybacks = $($buybacks[0]);
   HangarXPLOR.$buybacks.addClass('js-inventory');
   //HangarXPLOR.Log('Initialize->LoadSettings', 'HangarXPLOR.$buybacks=', HangarXPLOR.$buybacks);
 
   $buybacks == undefined;
 
-  //HangarXPLOR.UpdateStatus(0);
+  HangarXPLOR.UpdateStatus(0);
 
   LoadBuybackPage(1);
 }
@@ -125,7 +125,7 @@ function LoadBuybackPage(pageNo, pageSize) {
 function ProcessBuybackPage($page, pageNo, pageSize) {
   //HangarXPLOR.Log('ProcessBuybackPage $page=', $page);
 
-  // TODO:(pv) Verify (sic) "empy" class in Buy Back Pledges page
+  // TODO:(pv) Verify "empy" (sic) class in Buy Back Pledges page
   var isEmpty = $('.pledges > li > .empy-list', $page).length > 0;
   //HangarXPLOR.Log('ProcessBuybackPage isEmpty', isEmpty);
 
@@ -140,6 +140,7 @@ function ProcessBuybackPage($page, pageNo, pageSize) {
     HangarXPLOR.Log('Reached the end; render items...');
 
     $('div.content > div.inner-content > div.pager-wrapper').remove();
+    HangarXPLOR.$bulkUI.$inner.removeClass('loading');
 
     var buffer = HangarXPLOR._buybacks;
 
@@ -149,7 +150,7 @@ function ProcessBuybackPage($page, pageNo, pageSize) {
     HangarXPLOR.$buybacks.append(buffer);
 
     //HangarXPLOR.SaveCache();
-    //HangarXPLOR.DrawUI();
+    BuybackDrawUI();
 
     HangarXPLOR.$buybacks.on('click', 'li', function(e) {
       if (!e.originalEvent.isButton) {
@@ -157,8 +158,7 @@ function ProcessBuybackPage($page, pageNo, pageSize) {
         this.isSelected = !this.isSelected;
         HangarXPLOR.Log("ProcessBuybackPage this.isSelected", this.isSelected);
         if (this.isSelected) $('.pledge', this).addClass('js-selected');
-        
-        //RefreshBulkUI();
+        HangarXPLOR.RefreshBulkUI();
       }
     });
 
@@ -179,6 +179,93 @@ function ProcessBuybackItem() {
 
 function sleep(milliSeconds) {
   return new Promise(resolve => setTimeout(resolve, milliSeconds));
+}
+
+function BuybackBulkUI() {
+  var bulkHeight = $('.js-bulk-ui').height();
+  var maxOffset = document.body.scrollHeight - ($('.content .inner-content').height() + $('.content .inner-content').offset().top - 150);
+  var minOffset = $('.buy-back-pledges').offset().top;
+  
+  var positionUI = function() {
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    if (scrollTop > document.body.scrollHeight - maxOffset - bulkHeight) HangarXPLOR.$bulkUI[0].style.top = (document.body.scrollHeight - maxOffset - bulkHeight - scrollTop + 150) + 'px';
+    else if (scrollTop < minOffset) HangarXPLOR.$bulkUI[0].style.top = (minOffset - scrollTop + 150) + 'px';
+    else HangarXPLOR.$bulkUI[0].style.top = '160px';
+  };
+  
+  $(document).on('scroll', positionUI);
+  
+  var $content = $('.content');
+  
+  HangarXPLOR.$bulkUI = $('<div>', { class: 'js-bulk-ui' });
+  
+  HangarXPLOR.$bulkUI.$inner = $('<div>', { class: 'inner content-block1 loading' });
+  HangarXPLOR.$bulkUI.$value = $('<div>', { class: 'value' });
+  HangarXPLOR.$bulkUI.$actions = $('<div>', { class: 'actions' });
+  HangarXPLOR.$bulkUI.$downloads = $('<div>', { class: 'actions' });
+  HangarXPLOR.$bulkUI.$loading = $('<div>', { class: 'status value' });
+  
+  $content.append(HangarXPLOR.$bulkUI);
+  HangarXPLOR.$bulkUI.append(HangarXPLOR.$bulkUI.$inner);
+  HangarXPLOR.$bulkUI.$inner.append(
+    HangarXPLOR.$bulkUI.$loading,
+    HangarXPLOR.$bulkUI.$value,
+    HangarXPLOR.$bulkUI.$actions,
+    HangarXPLOR.$bulkUI.$downloads,
+    $('<div>', { class: 'top-line-thin' }),
+    $('<div>', { class: 'top-line' }),
+    $('<div>', { class: 'corner corner-top-right' }),
+    $('<div>', { class: 'corner corner-bottom-right' }));
+  
+  HangarXPLOR.$bulkUI.$downloads.append(HangarXPLOR.Button('Download CSV', 'download js-download-csv', HangarXPLOR._callbacks.DownloadCSV));
+  HangarXPLOR.$bulkUI.$downloads.append(HangarXPLOR.Button('Download JSON', 'download js-download-json', HangarXPLOR._callbacks.DownloadJSON));
+
+  bulkHeight = $('.js-bulk-ui').height();
+  positionUI();
+}
+
+function BuybackDrawUI() {
+  //...
+
+  var temp;
+
+  temp = $('#contentbody');
+  temp.css('padding-bottom', '15px');
+
+  temp = $('#contentbody > div.wrapper');
+  temp.css('max-width', 'none');
+
+  temp = $('#billing');
+  temp.css('padding', '20px');
+
+  temp = $('#billing > div.content.clearfix > div.sidenav');
+  temp.css('width', '330px');
+
+  temp = $('#billing > div.content.clearfix > div.sidenav > ul > li.active > a > span.bg');
+  temp.css('width', '275px');
+
+  temp = $('#billing > div > div.inner-content');
+  temp.css('width', 'auto');
+  temp.css('padding-left', '330px');
+
+  //...
+
+  var $controls = $('<div class="js-custom-controls">');
+  var $controls2 = $('<div>', { class: 'controls clearfix mrn15' });
+  $controls.append($controls2);
+
+  $controls.insertAfter('div.inner-content > section.buy-back-pledges');
+
+  // TODO:(pv) Move this to BuyBackBulkUI and add "Show All"
+  $controls2.append(HangarXPLOR.Button('Hide', 'js-custom-filter', () => {
+    console.log('click');
+    var $selected = $('.js-selected', HangarXPLOR.$buybacks);
+    console.log('click $selected', $selected);
+    $selected.hide();
+    //...
+  }));
+
+  //...
 }
 
 HangarXPLOR.Initialize();
